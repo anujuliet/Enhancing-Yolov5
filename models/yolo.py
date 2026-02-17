@@ -18,6 +18,11 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
+from models.common import C3, C3_PEA, C3_PEA_APDC
+from models.modules.apdc import APDC
+
+
+
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
@@ -27,6 +32,7 @@ if platform.system() != "Windows":
 
 from models.common import (
     C3,
+    C3_PEA,
     C3SPP,
     C3TR,
     SPP,
@@ -415,6 +421,8 @@ def parse_model(d, ch):
             CrossConv,
             BottleneckCSP,
             C3,
+            C3_PEA, 
+            C3_PEA_APDC,         # 🔥 ADD THIS LINE
             C3TR,
             C3SPP,
             C3Ghost,
@@ -422,6 +430,8 @@ def parse_model(d, ch):
             DWConvTranspose2d,
             C3x,
         }:
+        
+
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, ch_mul)
@@ -430,6 +440,11 @@ def parse_model(d, ch):
             if m in {BottleneckCSP, C3, C3TR, C3Ghost, C3x}:
                 args.insert(2, n)  # number of repeats
                 n = 1
+        elif m is APDC:
+            c1 = ch[f]     # input channels
+            c2 = c1        # output channels SAME
+            args = [c1]    # APDC(channels)
+
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
