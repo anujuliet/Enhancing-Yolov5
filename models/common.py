@@ -22,11 +22,8 @@ import torch.nn as nn
 from PIL import Image
 from torch.cuda import amp
 
-from models.modules.pea import PEA
-
 from models.modules.apdc import APDC
-
-
+from models.modules.pea import PEA
 
 # Import 'ultralytics' package or install if missing
 try:
@@ -249,10 +246,9 @@ class C3(nn.Module):
         """Performs forward propagation using concatenated outputs from two convolutions and a Bottleneck sequence."""
         return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
 
+
 class C3_PEA(C3):
-    """
-    C3 block with selective Position & Edge Attention (PEA)
-    Applied only in shallow layers
+    """C3 block with selective Position & Edge Attention (PEA) Applied only in shallow layers.
     """
 
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):
@@ -267,12 +263,10 @@ class C3_PEA(C3):
         return self.cv3(torch.cat((y1, y2), 1))
 
 
-
 class C3_PEA_APDC(C3):
+    """C3 block with Selective PEA + APDC Used in shallow / mid backbone only.
     """
-    C3 block with Selective PEA + APDC
-    Used in shallow / mid backbone only
-    """
+
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):
         super().__init__(c1, c2, n, shortcut, g, e)
         c_ = int(c2 * e)
@@ -289,9 +283,7 @@ class C3_PEA_APDC(C3):
 
 
 class PEA(nn.Module):
-    """
-    Position and Edge Attention (PEA)
-    Lightweight spatial attention module
+    """Position and Edge Attention (PEA) Lightweight spatial attention module.
     """
 
     def __init__(self, channels):
@@ -305,11 +297,9 @@ class PEA(nn.Module):
         return x * attn
 
 
-
 class C3_PEA(C3):
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):
         super().__init__(c1, c2, n, shortcut, g, e)
-
 
 
 class C3x(C3):
