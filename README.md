@@ -2,16 +2,7 @@
 <html>
 <head>
    
-        h1{
-            color:#1a73e8;
-        }
-        h2{
-            color:#333;
-        }
-        ul{
-            line-height:1.8;
-        }
-    </style>
+      
 </head>
 
 <body>
