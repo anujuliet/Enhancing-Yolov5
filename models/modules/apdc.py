@@ -2,11 +2,11 @@
 import torch
 import torch.nn as nn
 
+
 class APDC(nn.Module):
+    """Adaptive Pyramid Dilated Convolution (APDC) Used as a standalone mid-level context module.
     """
-    Adaptive Pyramid Dilated Convolution (APDC)
-    Used as a standalone mid-level context module
-    """
+
     def __init__(self, channels):
         super().__init__()
 
